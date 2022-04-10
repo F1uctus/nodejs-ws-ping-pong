@@ -1,0 +1,13 @@
+{
+  "name": "nodejs-ws-ping-pong-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "client.js",
+  "scripts": {
+    "test": "node test.js",
+    "start": "node client.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Unlicense"
+}
