@@ -5,16 +5,36 @@ For testing &amp; educational purposes only.
 
 Hosted on https://nodejs-ws-ping-pong.herokuapp.com
 
-### Running a simple client-server communication test
+### Prerequisites
+
+- NPM
+- Node.js (tested on 17.8.0)
+
+### Testing
+
+Running a simple client-server communication test:
 
 ```bash
 cd server
 npm start &
+SERVER_PID=$!
+echo $SERVER_PID
 sleep 3
 cd ../client-nodejs
 npm test
+kill $SERVER_PID
+cd ..
 ```
 
-### Testing from the browser
+To test the Heroku deployment, one should instead do:
 
-[/client/index.html](https://nodejs-ws-ping-pong.herokuapp.com/client.html)
+```bash
+export NJWSPP_REMOTE=heroku
+cd client-nodejs
+npm test
+cd ..
+```
+
+Testing from the browser:
+
+https://nodejs-ws-ping-pong.herokuapp.com/client.html

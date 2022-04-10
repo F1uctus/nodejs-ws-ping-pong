@@ -1,6 +1,10 @@
 const {WebSocketClient} = require("./client");
 
-const ws = new WebSocketClient("ws://localhost:3300", {
+const HOST = process.env.NJWSPP_REMOTE === "heroku"
+    ? "wss://nodejs-ws-ping-pong.herokuapp.com"
+    : "ws://localhost:3300";
+
+const ws = new WebSocketClient(HOST, {
     protocol: "ping-pong"
 })
 ws.onopen = async () => {

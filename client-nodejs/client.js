@@ -1,10 +1,14 @@
-const http = require("http");
-const crypto = require("crypto");
-const {
-    generateWebSocketAcceptHeaderValue,
-    WSHeaders,
-    encodeTextFrame, decodeTextMessage, encodeConnectionCloseFrame
-} = require("../websocket");
+const
+    net = require("net"),
+    http = require("http"),
+    tls = require("tls"),
+    https = require("https"),
+    crypto = require("crypto"),
+    {
+        generateWebSocketAcceptHeaderValue,
+        WSHeaders,
+        encodeTextFrame, decodeTextMessage, encodeConnectionCloseFrame
+    } = require("../websocket");
 
 const State = Object.freeze({
     CONNECTING: 0,
@@ -12,6 +16,21 @@ const State = Object.freeze({
     CLOSING: 2,
     CLOSED: 3,
 });
+
+function netConnect(options) {
+    options.path = options.socketPath;
+    return net.connect(options);
+}
+
+function tlsConnect(options) {
+    options.path = undefined;
+
+    if (!options.servername && options.servername !== '') {
+        options.servername = net.isIP(options.host) ? '' : options.host;
+    }
+
+    return tls.connect(options);
+}
 
 exports.WebSocketClient = class {
     /** State of our end of the connection */
@@ -55,13 +74,25 @@ exports.WebSocketClient = class {
         }
 
         let httpReq;
+        const path = (this.url.pathname || "/") + (this.url.search || "");
         switch (this.url.protocol) {
             case "ws:":
-                httpReq = http.request({
+                httpReq = http.get({
                     hostname: this.url.hostname,
+                    defaultPort: 80,
                     port: this.url.port || 80,
-                    path: (this.url.pathname || "/") + (this.url.search || ""),
-                    method: "POST",
+                    createConnection: netConnect,
+                    path: path,
+                    headers: headers
+                });
+                break;
+            case "wss:":
+                httpReq = https.get({
+                    hostname: this.url.hostname,
+                    defaultPort: 443,
+                    port: this.url.port || 443,
+                    createConnection: tlsConnect,
+                    path: path,
                     headers: headers
                 });
                 break;

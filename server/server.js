@@ -1,13 +1,14 @@
-const http = require("http");
-const fs = require("fs");
-const {
-    generateWebSocketAcceptHeaderValue,
-    WSHeaders,
-    WSOpCodes,
-    encodePongFrame,
-    encodeTextFrame,
-    decodeTextMessage
-} = require("../websocket");
+const
+    http = require("http"),
+    fs = require("fs"),
+    {
+        generateWebSocketAcceptHeaderValue,
+        WSHeaders,
+        WSOpCodes,
+        encodePongFrame,
+        encodeTextFrame,
+        decodeTextMessage
+    } = require("../websocket");
 
 
 const server = http.createServer((req, res) => {
