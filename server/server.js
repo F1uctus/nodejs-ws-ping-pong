@@ -218,7 +218,7 @@ function encodeTextFrame(data) {
 
 
 
-const PORT = 3300;
+const PORT = process.env.PORT || 3300;
 server.listen(PORT, () => {
     console.log(`Ping-Pong WebSocket server running at http://localhost:${PORT}`);
 });
