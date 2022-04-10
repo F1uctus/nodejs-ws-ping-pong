@@ -1,0 +1,7 @@
+{
+  "name": "Node.js WebSocket ping-pong",
+  "description": "",
+  "repository": "https://github.com/f1uctus/nodejs-ws-ping-pong",
+  "keywords": ["node", "heroku"],
+  "image": "heroku/nodejs"
+}

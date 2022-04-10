@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+    <head>
+        <script type = "text/javascript">
+            let ws;
+            let url;
+            function connect() {
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    alert("Already connected");
+                    return;
+                }
+                url = document.getElementById("url").value;
+                ws = new WebSocket(url);
+                ws.onopen = function() {
+                    alert("Connected to " + url);
+                };
+                ws.onmessage = function(evt) {
+                    writeHistory("(Server): " + evt.data);
+                };
+                ws.onclose = function() {
+                    alert("Disconnected from " + url);
+                };
+            }
+            function ping() {
+                if (!ws || ws.readyState !== WebSocket.OPEN) {
+                    alert("Not connected");
+                    return;
+                }
+                const message = document.getElementById("message").value;
+                writeHistory("(Client): " + message);
+                ws.send(message);
+            }
+            function disconnect() {
+                if (!ws || ws.readyState !== WebSocket.OPEN) {
+                    alert("Not connected");
+                    return;
+                }
+                ws.close();
+                alert("Disconnected from " + url);
+            }
+            function writeHistory(message) {
+                const hms = new Date().toTimeString().split(" ")[0];
+                message = hms + ": " + message;
+                const history = document.getElementById("history"); 
+                var entry = document.createElement("li");
+                entry.appendChild(document.createTextNode(message));
+                history.prepend(entry);
+            }
+            function clearHistory() {
+                document.getElementById("history").innerHTML = "";
+            }
+        </script>
+    </head>
+    <body>
+        <div id="sse" style="display: flex; flex-flow: column nowrap; gap: 10px">
+            <input
+                type="text"
+                id="url"
+                placeholder="ws://localhost:3300" value="ws://localhost:3300">
+            <button onclick="connect()" style="height: 50px;">
+                Connect
+            </button>
+            <button onclick="disconnect()" style="height: 50px;">
+                Disconnect
+            </button>
+            <input
+                type="text"
+                id="message"
+                placeholder="ping" value="ping">
+            <button onclick="ping()" style="height: 50px;">
+                Send
+            </button>
+            <button onclick="clearHistory()">
+                Clear history
+            </button>
+            <ul id="history"></ul>
+        </div>
+    </body>
+</html>
