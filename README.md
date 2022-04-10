@@ -17,8 +17,7 @@ Running a simple client-server communication test:
 ```bash
 cd server
 npm start &
-SERVER_PID=$!
-echo $SERVER_PID
+export SERVER_PID=$!
 sleep 3
 cd ../client-nodejs
 npm test
